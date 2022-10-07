@@ -9,6 +9,8 @@ import Academy from './components/Academy';
 import AnimationRendering from './components/AnimationRendering';
 import ProceduralAI from './components/ProceduralAI';
 import RealTime3D from './components/RealTime3D';
+import NavbarSite from './components/Navbar';
+import Button from 'react-bootstrap/Button';
 
 function AppFunction() {
   let [index, setIndex] = useState(0);
@@ -64,14 +66,15 @@ function AppFunction() {
 
   return(
       
-    <div className='container'>
-      <button className='buttonLeft' onClick={() => onChange(0)}>&#10094;</button>
+    <div className='containercarousel'>
+      <NavbarSite/>
+      <Button className='buttonLeft' variant="outline-light" onClick={() => onChange(0)}></Button>
       <TransitionGroup childFactory={child => cloneElement(child, { classNames: isNext ? "right-to-left" : "left-to-right", timeout: 1000 })}>
         <CSSTransition key={index} classNames="right-to-left" timeout={1000}>
           {carousel[index]}
         </CSSTransition>
       </TransitionGroup>
-      <button className='buttonRight' onClick={() => onChange(1)}>&#10095;</button>
+      <Button className='buttonRight' variant="outline-light" onClick={() => onChange(1)}></Button>
     </div>
   );
 }
