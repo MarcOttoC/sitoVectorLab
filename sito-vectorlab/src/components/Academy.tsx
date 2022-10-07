@@ -1,13 +1,7 @@
 import React from 'react';
 import AcademyRenderer from '../rendererComponents/AcademyRenderer';
 
-interface Props {
-
-  width: number,
-  height: number
-}
-
-class Academy extends React.Component<Props>{
+class Academy extends React.Component{
 
   render(){
 

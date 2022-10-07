@@ -4,50 +4,64 @@ body {
   overflow-y: hidden;
 }
 
-.container {
-  position: relative;
-  display: flex;
-  z-index: 0;
-  margin-left: auto;
-  margin-right: auto;
-  height: 100vh;
-  width: 100vw;
+.containerglobal {
+  height: 100%;
+  width: 100%;
 
+}
+
+.mask{
+ 
+      background: linear-gradient(
+        45deg,
+        rgba(29, 236, 197, 0.5),
+        rgba(91, 14, 214, 0.5) 100%
+      );
+    
 }
 
 .carouselElement {
-
-  margin-left: auto;
-  margin-right: auto;
   text-align: center;
   position: absolute;
-  height: 100vh;
-  width: 100vw;
-  z-index: 10;
-  
+  height: 100%;
+  width: 100%;
+  z-index: 1;
 }
 
 .buttonLeft {
-
-  display: flex;
   position: absolute;
-  margin-top: 49vh;
-  z-index: 20;
+  height: 100%;
+  width: 3.125rem;
+  border: none!important;
+  opacity:0.1;
+  z-index: 2;
+}
+
+.buttonLeft:hover {
+
+  background-color: black!important;
 }
 
 .buttonRight {
 
-  display: flex;
   position: absolute;
-  z-index: 20;
-  margin-left: 98%;
-  margin-top: 49vh;
+  height: 100%;
+  width: 3.125rem;
+  border: none!important;
+  opacity: 0.1;
+  z-index: 2;
+  right: 0;
+}
+
+.buttonRight:hover {
+
+  background-color: black!important;
 }
 
 .canvas-container {
 
-  width: 100%;
-  height: 100%;
+  aspect-ratio: 1;
+  height: 50%;
 }
 
 .canvas {

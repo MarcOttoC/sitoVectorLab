@@ -1,20 +1,20 @@
 import React, {cloneElement, useEffect, useState} from 'react';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import './App.css';
 import VrApplication from "./components/VrApplication";
 import ArApplication from './components/ArApplication';
 import GameDev from './components/GameDev';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Gamification from './components/Gamification';
 import Academy from './components/Academy';
 import AnimationRendering from './components/AnimationRendering';
 import ProceduralAI from './components/ProceduralAI';
 import RealTime3D from './components/RealTime3D';
+import NavbarSite from './components/Navbar';
+import Button from 'react-bootstrap/Button';
 
 function AppFunction() {
   let [index, setIndex] = useState(0);
   let [isNext, setIsNext] = useState(true);
-  //const [touchStart, setTouchStart] = useState(0);
-  //const [touchEnd, setTouchEnd] = useState(0);
   const [dimensions, setDimensions] = useState({
 
     height: window.innerHeight,
@@ -30,7 +30,7 @@ function AppFunction() {
     <RealTime3D/>,
     <ProceduralAI/>,
     <AnimationRendering/>,
-    <Academy width={dimensions.width} height={dimensions.height}/>
+    <Academy/>
     
   ];
 
@@ -56,35 +56,6 @@ function AppFunction() {
       console.log(dimensions.height, dimensions.width);
     }
 
-    /*function handleTouchStart(e:TouchEvent) {
-
-      setTouchStart(e.targetTouches[0].clientX);
-      console.log(e.targetTouches[0].clientX)
-    }
-
-    
-    function handleTouchMove(e:TouchEvent) {
-
-      setTouchEnd(e.targetTouches[0].clientX);
-    }
-
-    const handleTouchEnd = () => {
-
-      if (touchStart < touchEnd && Math.abs(touchStart - touchEnd) > 40) {
-        
-        index === 0 ? setIndex(index = (carousel.length - 1)) : setIndex(index - 1);
-        setIsNext(isNext = false);
-        console.log(index)
-      }
-
-    }
-
-    window.addEventListener('touchstart', handleTouchStart);
- 
-    window.addEventListener('touchmove', handleTouchMove);
-
-    window.addEventListener('touchend', handleTouchEnd);*/
-
     window.addEventListener('resize', handleResize);
     return () => {
 
@@ -95,14 +66,15 @@ function AppFunction() {
 
   return(
       
-    <div className='container'>
-      <button className='buttonLeft' onClick={() => onChange(0)}>&#10094;</button>
+    <div className='containercarousel'>
+      <NavbarSite/>
+      <Button className='buttonLeft' variant="outline-light" onClick={() => onChange(0)}></Button>
       <TransitionGroup childFactory={child => cloneElement(child, { classNames: isNext ? "right-to-left" : "left-to-right", timeout: 1000 })}>
         <CSSTransition key={index} classNames="right-to-left" timeout={1000}>
           {carousel[index]}
         </CSSTransition>
       </TransitionGroup>
-      <button className='buttonRight' onClick={() => onChange(1)}>&#10095;</button>
+      <Button className='buttonRight' variant="outline-light" onClick={() => onChange(1)}></Button>
     </div>
   );
 }
