@@ -23,14 +23,14 @@ function AppFunction() {
 
   const carousel: React.ReactNode[] = [
 
-    <VrApplication />,
-    <ArApplication/>,
-    <GameDev/>,
-    <Gamification/>,
-    <RealTime3D/>,
-    <ProceduralAI/>,
-    <AnimationRendering/>,
-    <Academy/>
+    <VrApplication/>,   //vr
+    <ArApplication/>, //ar
+    <GameDev/>, //gamedev
+    <Gamification/>, //gamification
+    <RealTime3D/>,  //3d
+    <ProceduralAI/>,//
+    <AnimationRendering/>,// animation
+    <Academy/>//
     
   ];
 
@@ -44,6 +44,22 @@ function AppFunction() {
       index === (carousel.length - 1) ? setIndex(index = 0) : setIndex(index + 1)
       setIsNext(isNext = true);
     }
+  }
+
+  const onChangeNav = (cardNumber:number):void => {
+
+    if (cardNumber === index)
+
+      return;
+    if (cardNumber > index){
+
+      setIsNext(isNext = true);
+    } else {
+
+      setIsNext(isNext = false);
+    }
+
+    setIndex(index = cardNumber);
   }
 
   useEffect(() => {
@@ -67,7 +83,7 @@ function AppFunction() {
   return(
       
     <div className='containercarousel'>
-      <NavbarSite/>
+      <NavbarSite fastNav={onChangeNav}/>
       <Button className='buttonLeft' variant="outline-light" onClick={() => onChange(0)}></Button>
       <TransitionGroup childFactory={child => cloneElement(child, { classNames: isNext ? "right-to-left" : "left-to-right", timeout: 1000 })}>
         <CSSTransition key={index} classNames="right-to-left" timeout={1000}>
