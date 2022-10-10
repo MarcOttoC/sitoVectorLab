@@ -19,18 +19,18 @@ function AppFunction() {
 
     height: window.innerHeight,
     width: window.innerWidth
-  })
+  });
 
   const carousel: React.ReactNode[] = [
 
-    <VrApplication/>,   //vr
-    <ArApplication/>, //ar
-    <GameDev/>, //gamedev
-    <Gamification/>, //gamification
-    <RealTime3D/>,  //3d
-    <ProceduralAI/>,//
-    <AnimationRendering/>,// animation
-    <Academy/>//
+    <VrApplication/>,
+    <ArApplication/>, 
+    <GameDev/>,
+    <Gamification/>,
+    <RealTime3D/>, 
+    <ProceduralAI/>,
+    <AnimationRendering/>,
+    <Academy/>
     
   ];
 
