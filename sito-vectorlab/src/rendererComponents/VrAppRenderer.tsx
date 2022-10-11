@@ -52,17 +52,16 @@ class VrAppRenderer extends React.Component{
     this.renderer.autoClear = true;
     this.scene = new Scene();
     this.camera = new PerspectiveCamera(50, 1, 0.1, 1000);
-    this.camera.position.set(20, 10, 30);
+    this.camera.position.set(0, 0, 4);
     this.light = new DirectionalLight(0xffffff, 1.0);
     this.light.position.set(5, 4, 0);
-    var orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
+    //var orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
     this.scene.add(this.light);
     this.update();
     this.material = new MeshNormalMaterial;
     this.geometry = new BoxGeometry(3, 3, 3);
     this.vrModel = new Mesh (this.geometry, this.material);
     this.renderer.setSize(this.myCanvas.width, this.myCanvas.height);    
-   // this.scene.add(this.vrModel);
 
     //Collect Mouse data
 
@@ -96,11 +95,10 @@ class VrAppRenderer extends React.Component{
     requestAnimationFrame(this.update.bind(this));
     if(this.vrModel){
 
-      this.loadedModel.rotation.y =  -(this.yMax - this.mouse.y)/2;
-      this.loadedModel.rotation.x +=  (this.xMax - this.mouse.x)/1024;
+      this.loadedModel.rotation.y +=  -(this.yMax - this.mouse.y)/128;
+      this.loadedModel.rotation.x +=  (this.xMax - this.mouse.x)/128;
       //this.loadedModel.rotation.x += 0.001;
-      console.log(this.mouse.x, "x");
-      console.log(this.mouse.y, "y");
+      console.log(this.loadedModel);
     }
     
     this.renderer.render(this.scene, this.camera);
