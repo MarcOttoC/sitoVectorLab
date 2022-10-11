@@ -9,12 +9,21 @@ import {
   MeshNormalMaterial,
   Vector2,
   Vector3,
+  Object3D,
+  Quaternion,
 } from "three";
+
+
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 
 class VrAppRenderer extends React.Component{
 
+  //imported 3d model
+
+  loader = new GLTFLoader();
+  loadedModel!: Object3D
 
   ////Scene elements
   
@@ -43,7 +52,7 @@ class VrAppRenderer extends React.Component{
     this.renderer.autoClear = true;
     this.scene = new Scene();
     this.camera = new PerspectiveCamera(50, 1, 0.1, 1000);
-    this.camera.position.set(20, 10, 20);
+    this.camera.position.set(20, 10, 30);
     this.light = new DirectionalLight(0xffffff, 1.0);
     this.light.position.set(5, 4, 0);
     var orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -53,9 +62,14 @@ class VrAppRenderer extends React.Component{
     this.geometry = new BoxGeometry(3, 3, 3);
     this.vrModel = new Mesh (this.geometry, this.material);
     this.renderer.setSize(this.myCanvas.width, this.myCanvas.height);    
-    this.scene.add(this.vrModel);
+   // this.scene.add(this.vrModel);
 
     //Collect Mouse data
+
+    this.loader.load('/models/vr-page-model.glb',(gltfScene) => {
+      this.loadedModel = gltfScene.scene.children[0]
+      this.scene.add(this.loadedModel)
+    })
 
     this.myCanvas.addEventListener("mousemove", e => { 
       this.mouse.x = Math.max(Math.min(-(e.clientY / window.innerHeight) * 2 + 1,this.yMax),this.yMin)
@@ -81,9 +95,12 @@ class VrAppRenderer extends React.Component{
 
     requestAnimationFrame(this.update.bind(this));
     if(this.vrModel){
-      
-      this.vrModel.rotation.y += this.mouse.y/25;
-      this.vrModel.rotation.x += (-this.mouse.x/25);
+
+      this.loadedModel.rotation.y =  -(this.yMax - this.mouse.y)/2;
+      this.loadedModel.rotation.x +=  (this.xMax - this.mouse.x)/1024;
+      //this.loadedModel.rotation.x += 0.001;
+      console.log(this.mouse.x, "x");
+      console.log(this.mouse.y, "y");
     }
     
     this.renderer.render(this.scene, this.camera);

@@ -1,0 +1,11 @@
+Model Information:
+* title:	Gunblade from FFVIII
+* source:	https://sketchfab.com/3d-models/gunblade-from-ffviii-66562b7ae1744c7a80f68d67af8f25f0
+* author:	nikexz (https://sketchfab.com/nikexz)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Gunblade from FFVIII" (https://sketchfab.com/3d-models/gunblade-from-ffviii-66562b7ae1744c7a80f68d67af8f25f0) by nikexz (https://sketchfab.com/nikexz) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
