@@ -7,6 +7,8 @@ import {
   DirectionalLight,
   BoxGeometry,
   MeshNormalMaterial,
+  Vector2,
+  Vector3,
 } from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -17,10 +19,19 @@ class VrAppRenderer extends React.Component{
   renderer!: WebGLRenderer;
   scene!: Scene;
   camera!: PerspectiveCamera;
-  cube!: Mesh;
+  vrModel!: Mesh;
   light!: DirectionalLight;
   material!: MeshNormalMaterial;
   geometry!: BoxGeometry;
+
+  xMax = Math.PI/4
+  xMin = -Math.PI/4
+  yMax = Math.PI/4
+  yMin = -Math.PI/4
+
+  mouse = new Vector2()
+  axis = new Vector3(1,0,0)
+
 
 
   componentDidMount(): void {
@@ -37,13 +48,17 @@ class VrAppRenderer extends React.Component{
     this.update();
     this.material = new MeshNormalMaterial;
     this.geometry = new BoxGeometry(3, 3, 3);
-    this.cube = new Mesh (this.geometry, this.material);
+    this.vrModel = new Mesh (this.geometry, this.material);
     this.renderer.setSize(this.myCanvas.width, this.myCanvas.height);    
-    this.scene.add(this.cube);
+    this.scene.add(this.vrModel);
+    this.myCanvas.addEventListener("mousemove", e => { 
+      this.mouse.x = Math.max(Math.min(-(e.clientY / window.innerHeight) * 2 + 1,this.yMax),this.yMin)
+      this.mouse.y = Math.max(Math.min(((e.clientX / window.innerWidth) * 2 - 1),this.xMax),this.xMin)
+  })
 
   }
 
-  componentdid(): void {
+  componentWillUnmount(): void {
 
     this.scene.clear();
     this.material.dispose();
@@ -55,6 +70,13 @@ class VrAppRenderer extends React.Component{
   private update(): void {
     
     requestAnimationFrame(this.update.bind(this));
+    console.log(this.vrModel)
+    if(this.vrModel){
+      console.log(this.vrModel)
+      this.vrModel.rotation.y += 0.01 + (this.mouse.y/100);
+      this.vrModel.rotation.x += 0.01 + (-this.mouse.x/100);
+    }
+    
     this.renderer.render(this.scene, this.camera);
   }
 
