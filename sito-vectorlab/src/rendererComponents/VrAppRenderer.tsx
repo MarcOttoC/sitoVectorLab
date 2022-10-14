@@ -36,13 +36,20 @@ class VrAppRenderer extends React.Component{
   material!: MeshNormalMaterial;
   geometry!: BoxGeometry;
 
+  
   //Rotation variables
 
   xMax = Math.PI/4
   xMin = -Math.PI/4
   yMax = Math.PI/4
   yMin = -Math.PI/4
-  mouse = new Vector2()
+  mouse = new Vector2
+  oldMouse = new Vector2
+
+  P = new Vector3(0,0,0)
+  T = new Vector3()
+  threshold = new Vector2(0.2,0.2)
+
   
 
 
@@ -75,6 +82,8 @@ class VrAppRenderer extends React.Component{
       this.mouse.y = Math.max(Math.min(((e.clientX / window.innerWidth) * 2 - 1),this.xMax),this.xMin)
   })
 
+      this.oldMouse.x = this.mouse.x
+      this.oldMouse.y = this.mouse.y
   }
 
   componentWillUnmount(): void {
@@ -89,16 +98,31 @@ class VrAppRenderer extends React.Component{
 
 
   private update(): void {
+
+    requestAnimationFrame(this.update.bind(this));
+
+    this.P = this.P.add(this.T.sub(this.P).multiplyScalar(1/16));
+  //  if(this.mouse.sub(this.oldMouse).length() > 0.001 ){
+      this.T.y = this.mouse.x
+      this.T.x = this.mouse.y
+      this.T.z = 4
+      this.oldMouse = this.mouse
+      
+     // console.log(this.mouse,"mouse")
+      //console.log(this.oldMouse,"old mouse")
+      //console.log(this.mouse.sub(this.oldMouse).length())
+
+ //   }  
     
     //Animation
 
-    requestAnimationFrame(this.update.bind(this));
-    if(this.vrModel){
-
-      this.loadedModel.rotation.y +=  -(this.yMax - this.mouse.y)/128;
-      this.loadedModel.rotation.x +=  (this.xMax - this.mouse.x)/128;
+    if(this.loadedModel){
+      this.loadedModel.lookAt(this.P);
+      this.loadedModel.rotateOnAxis(new Vector3(1, 0, 0), -Math.PI/2);
+      //this.loadedModel.rotateOnAxis(new Vector3(1, 0, 0), Math.PI);
+      //this.loadedModel.rotation.y +=  -(this.yMax - this.mouse.y)/8;
+      //this.loadedModel.rotation.x +=  (this.xMax - this.mouse.x)/8;
       //this.loadedModel.rotation.x += 0.001;
-      console.log(this.loadedModel);
     }
     
     this.renderer.render(this.scene, this.camera);

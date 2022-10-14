@@ -17,14 +17,14 @@ const NavbarSite:React.FunctionComponent<Props> = (props) =>{
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link onClick={() => props.fastNav(0)}>VR</Nav.Link>
-              <Nav.Link onClick={() => props.fastNav(1)}>AR</Nav.Link>
-              <Nav.Link onClick={() => props.fastNav(2)}>GameDev</Nav.Link>
-              <Nav.Link onClick={() => props.fastNav(3)}>Gamification</Nav.Link>
-              <Nav.Link onClick={() => props.fastNav(4)}>3D</Nav.Link>
-              <Nav.Link onClick={() => props.fastNav(5)}>ProceduralAI</Nav.Link>
-              <Nav.Link onClick={() => props.fastNav(6)}>Animation</Nav.Link>
-              <Nav.Link onClick={() => props.fastNav(7)}>Academy</Nav.Link>
+              <Nav.Link onClick={() => props.fastNav(0)}>./ VR     </Nav.Link>
+              <Nav.Link onClick={() => props.fastNav(1)}>./ AR     </Nav.Link>
+              <Nav.Link onClick={() => props.fastNav(2)}>./ GameDev</Nav.Link>
+              <Nav.Link onClick={() => props.fastNav(3)}>./ Gamification</Nav.Link>
+              <Nav.Link onClick={() => props.fastNav(4)}>./ 3D     </Nav.Link>
+              <Nav.Link onClick={() => props.fastNav(5)}>./ ProceduralAI</Nav.Link>
+              <Nav.Link onClick={() => props.fastNav(6)}>./ Animation</Nav.Link>
+              <Nav.Link onClick={() => props.fastNav(7)}>./ Academy  </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

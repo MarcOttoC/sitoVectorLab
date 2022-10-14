@@ -58,6 +58,10 @@ body {
   background-color: black!important;
 }
 
+.nav-link:focus, .nav-link:hover {
+  color: rgb(0, 255, 0)!important
+} 
+
 .canvas-container {
 
   aspect-ratio: 1;
