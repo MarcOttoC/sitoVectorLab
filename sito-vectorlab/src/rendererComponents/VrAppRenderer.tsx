@@ -10,20 +10,15 @@ import {
   Vector2,
   Vector3,
   Object3D,
-  Quaternion,
 } from "three";
-
-
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-
 
 class VrAppRenderer extends React.Component{
 
   //imported 3d model
 
   loader = new GLTFLoader();
-  loadedModel!: Object3D
+  loadedModel!: Object3D;
 
   ////Scene elements
   
@@ -35,22 +30,19 @@ class VrAppRenderer extends React.Component{
   light!: DirectionalLight;
   material!: MeshNormalMaterial;
   geometry!: BoxGeometry;
-
   
   //Rotation variables
 
-  xMax = Math.PI/4
-  xMin = -Math.PI/4
-  yMax = Math.PI/4
-  yMin = -Math.PI/4
-  mouse = new Vector2
-  oldMouse = new Vector2
+  xMax = Math.PI/4;
+  xMin = -Math.PI/4;
+  yMax = Math.PI/4;
+  yMin = -Math.PI/4;
+  mouse = new Vector2;
+  oldMouse = new Vector2;
 
-  P = new Vector3(0,0,0)
-  T = new Vector3()
-  threshold = new Vector2(0.2,0.2)
-
-  
+  P = new Vector3(0,0,0);
+  T = new Vector3();
+  threshold = new Vector2(0.2,0.2);
 
 
   componentDidMount(): void {
@@ -62,28 +54,29 @@ class VrAppRenderer extends React.Component{
     this.camera.position.set(0, 0, 4);
     this.light = new DirectionalLight(0xffffff, 1.0);
     this.light.position.set(5, 4, 0);
-    //var orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
     this.scene.add(this.light);
-    this.update();
     this.material = new MeshNormalMaterial;
     this.geometry = new BoxGeometry(3, 3, 3);
     this.vrModel = new Mesh (this.geometry, this.material);
     this.renderer.setSize(this.myCanvas.width, this.myCanvas.height);    
+    this.update();
 
     //Collect Mouse data
 
     this.loader.load('/models/vr-page-model.glb',(gltfScene) => {
-      this.loadedModel = gltfScene.scene.children[0]
-      this.scene.add(this.loadedModel)
+
+      this.loadedModel = gltfScene.scene.children[0];
+      this.scene.add(this.loadedModel);
     })
 
     this.myCanvas.addEventListener("mousemove", e => { 
-      this.mouse.x = Math.max(Math.min(-(e.clientY / window.innerHeight) * 2 + 1,this.yMax),this.yMin)
-      this.mouse.y = Math.max(Math.min(((e.clientX / window.innerWidth) * 2 - 1),this.xMax),this.xMin)
-  })
 
-      this.oldMouse.x = this.mouse.x
-      this.oldMouse.y = this.mouse.y
+      this.mouse.x = Math.max(Math.min(-(e.clientY / window.innerHeight) * 2 + 1,this.yMax),this.yMin);
+      this.mouse.y = Math.max(Math.min(((e.clientX / window.innerWidth) * 2 - 1),this.xMax),this.xMin);
+    })
+
+    this.oldMouse.x = this.mouse.x;
+    this.oldMouse.y = this.mouse.y;
   }
 
   componentWillUnmount(): void {
@@ -102,27 +95,18 @@ class VrAppRenderer extends React.Component{
     requestAnimationFrame(this.update.bind(this));
 
     this.P = this.P.add(this.T.sub(this.P).multiplyScalar(1/16));
-  //  if(this.mouse.sub(this.oldMouse).length() > 0.001 ){
-      this.T.y = this.mouse.x
-      this.T.x = this.mouse.y
-      this.T.z = 4
-      this.oldMouse = this.mouse
-      
-     // console.log(this.mouse,"mouse")
-      //console.log(this.oldMouse,"old mouse")
-      //console.log(this.mouse.sub(this.oldMouse).length())
+    this.T.y = this.mouse.x;
+    this.T.x = this.mouse.y;
+    this.T.z = 4;
+    this.oldMouse = this.mouse;
 
- //   }  
-    
     //Animation
 
     if(this.loadedModel){
+
       this.loadedModel.lookAt(this.P);
       this.loadedModel.rotateOnAxis(new Vector3(1, 0, 0), -Math.PI/2);
-      //this.loadedModel.rotateOnAxis(new Vector3(1, 0, 0), Math.PI);
-      //this.loadedModel.rotation.y +=  -(this.yMax - this.mouse.y)/8;
-      //this.loadedModel.rotation.x +=  (this.xMax - this.mouse.x)/8;
-      //this.loadedModel.rotation.x += 0.001;
+
     }
     
     this.renderer.render(this.scene, this.camera);

@@ -10,15 +10,10 @@ import {
   Vector2,
   AxesHelper,
 } from "three";
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-
-
-
 
 class ArAppRenderer extends React.Component{
 
   helper = new AxesHelper (5000)
-
   myCanvas!: HTMLCanvasElement;
   renderer!: WebGLRenderer;
   scene!: Scene;
@@ -27,36 +22,29 @@ class ArAppRenderer extends React.Component{
   light!: DirectionalLight;
   material!: MeshNormalMaterial;
   geometry!: SphereGeometry;
-  
-  rect!: DOMRect
+  rect!: DOMRect;
 
- 
+  SMX!: number;
+  A!: number;
+  X!: number;
+  radius = 30;
 
   mouse = new Vector2(1,1);
-  xMax = Math.PI/4
-  xMin = -Math.PI/4
-  yMax = Math.PI/4
-  yMin = -Math.PI/4
-
-  SMX!: number
-  A!: number
-  X!: number
-  radius = 30
-
+  xMax = Math.PI/4;
+  xMin = -Math.PI/4;
+  yMax = Math.PI/4;
+  yMin = -Math.PI/4;
 
   componentDidMount(): void {
 
-    const FOV = 50
-
-
-    this.rect = this.myCanvas.getBoundingClientRect()
+    const FOV = 50;
+    this.rect = this.myCanvas.getBoundingClientRect();
     this.renderer = new WebGLRenderer({ canvas: this.myCanvas, alpha:true, antialias:true});
     this.scene = new Scene();
     this.camera = new PerspectiveCamera(FOV);
     this.camera.position.set(0, 0, this.radius);
     this.light = new DirectionalLight(0xffffff, 1.0);
     this.light.position.set(5, 4, 0);
-    //var orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
     this.scene.add(this.light,this.helper);
     this.update();
     this.material = new MeshNormalMaterial;
@@ -64,21 +52,22 @@ class ArAppRenderer extends React.Component{
     this.sphere = new Mesh(this.geometry, this.material);
     this.scene.add(this.sphere,this.helper);
     this.renderer.setSize(this.myCanvas.width, this.myCanvas.height);  
-    const degreePerPixel = FOV / this.rect.width
+    const degreePerPixel = FOV / this.rect.width;
 
     this.myCanvas.addEventListener("mousemove", e => { 
-     // this.mouse.y = Math.floor((Math.max(Math.min(-(e.clientY / this.myCanvas.height) * 2 + 1,this.yMax),this.yMin))*100)
-      //this.mouse.x = Math.floor((Math.max(Math.min(((e.clientX / this.myCanvas.width) * 2 - 1),this.xMax),this.xMin)*100))
-      //this.sphere.position.x = ((e.clientX - this.rect.left)-this.rect.width/2)/80;  
-      //this.sphere.position.y = (-(e.clientY - this.rect.top)+this.rect.height/2)/80;
-      this.SMX = (e.clientX - this.rect.left) - (this.rect.width/2)
-      this.A=degreePerPixel * this.SMX
-      this.sphere.position.x = Math.tan(this.A* Math.PI / 180)*this.radius
 
+      this.SMX = (e.clientX - this.rect.left) - (this.rect.width/2);
+      this.A=degreePerPixel * this.SMX;
+      this.sphere.position.x = Math.tan(this.A* Math.PI / 180)*this.radius;
+  
+      this.SMX = (e.clientY - this.rect.top) - (this.rect.height/2);
+      this.A=degreePerPixel * this.SMX;
+      this.sphere.position.y = -Math.tan(this.A* Math.PI / 180)*this.radius;
     })
   }
 
   componentWillUnmount(): void {
+
     this.scene.clear();
     this.material.dispose();
     this.geometry.dispose();
@@ -88,7 +77,6 @@ class ArAppRenderer extends React.Component{
   private update(): void {
 
     requestAnimationFrame(this.update.bind(this));
-
     this.renderer.render(this.scene, this.camera);
   }
 
