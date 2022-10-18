@@ -61,13 +61,13 @@ class VrAppRenderer extends React.Component{
     this.renderer.setSize(this.myCanvas.width, this.myCanvas.height);    
     this.update();
 
-    //Collect Mouse data
-
     this.loader.load('/models/vr-page-model.glb',(gltfScene) => {
 
       this.loadedModel = gltfScene.scene.children[0];
       this.scene.add(this.loadedModel);
     })
+
+    //Collect Mouse data
 
     this.myCanvas.addEventListener("mousemove", e => { 
 
