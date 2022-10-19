@@ -7,7 +7,6 @@ import {
   DirectionalLight,
   MeshNormalMaterial,
   SphereGeometry,
-  Vector2,
   AxesHelper,
 } from "three";
 
@@ -26,19 +25,13 @@ class ArAppRenderer extends React.Component{
 
   SMX!: number;
   A!: number;
-  X!: number;
   radius = 30;
-
-  mouse = new Vector2(1,1);
-  xMax = Math.PI/4;
-  xMin = -Math.PI/4;
-  yMax = Math.PI/4;
-  yMin = -Math.PI/4;
 
   componentDidMount(): void {
 
     const FOV = 50;
     this.rect = this.myCanvas.getBoundingClientRect();
+    const degreePerPixel = FOV / this.rect.width;
     this.renderer = new WebGLRenderer({ canvas: this.myCanvas, alpha:true, antialias:true});
     this.scene = new Scene();
     this.camera = new PerspectiveCamera(FOV);
@@ -52,7 +45,6 @@ class ArAppRenderer extends React.Component{
     this.sphere = new Mesh(this.geometry, this.material);
     this.scene.add(this.sphere,this.helper);
     this.renderer.setSize(this.myCanvas.width, this.myCanvas.height);  
-    const degreePerPixel = FOV / this.rect.width;
 
     this.myCanvas.addEventListener("mousemove", e => { 
 

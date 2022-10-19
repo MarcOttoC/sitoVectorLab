@@ -38,11 +38,9 @@ class VrAppRenderer extends React.Component{
   yMax = Math.PI/4;
   yMin = -Math.PI/4;
   mouse = new Vector2;
-  oldMouse = new Vector2;
 
   P = new Vector3(0,0,0);
   T = new Vector3();
-  threshold = new Vector2(0.2,0.2);
 
 
   componentDidMount(): void {
@@ -74,9 +72,6 @@ class VrAppRenderer extends React.Component{
       this.mouse.x = Math.max(Math.min(-(e.clientY / window.innerHeight) * 2 + 1,this.yMax),this.yMin);
       this.mouse.y = Math.max(Math.min(((e.clientX / window.innerWidth) * 2 - 1),this.xMax),this.xMin);
     })
-
-    this.oldMouse.x = this.mouse.x;
-    this.oldMouse.y = this.mouse.y;
   }
 
   componentWillUnmount(): void {
@@ -98,7 +93,6 @@ class VrAppRenderer extends React.Component{
     this.T.y = this.mouse.x;
     this.T.x = this.mouse.y;
     this.T.z = 4;
-    this.oldMouse = this.mouse;
 
     //Animation
 
