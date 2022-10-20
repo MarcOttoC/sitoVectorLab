@@ -9,9 +9,17 @@ import {
   Vector2,
   BoxGeometry,
   AxesHelper,
+  Object3D,
 } from "three";
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 class GameDevRenderer extends React.Component{
+
+
+  //imported 3d model
+
+  loader = new GLTFLoader();
+  loadedModel!: Object3D;
 
   ////Scene elements
   
@@ -45,7 +53,7 @@ class GameDevRenderer extends React.Component{
     this.rect = this.myCanvas.getBoundingClientRect();;
     this.degreePerPixel = this.FOV / this.rect.width;
     const axesHelper = new AxesHelper( 500 );
-    this.renderer = new WebGLRenderer({ canvas: this.myCanvas, /*alpha:true,*/ antialias:true});
+    this.renderer = new WebGLRenderer({ canvas: this.myCanvas, alpha:true, antialias:true});
     this.renderer.autoClear = true;
     this.scene = new Scene();
     this.camera = new PerspectiveCamera(this.FOV);
@@ -54,11 +62,22 @@ class GameDevRenderer extends React.Component{
     this.light.position.set(5, 4, 0);
     this.material = new MeshNormalMaterial;
     this.geometry = new BoxGeometry(11, 1, 12);
-    this.cube = new Mesh(this.geometry, this.material);
-    this.cube.position.x = 0;
-    this.cube.position.y = 0;
+    //this.cube = new Mesh(this.geometry, this.material);
+    //this.cube.position.x = 0;
+    //this.cube.position.y = 0;
     this.renderer.setSize(this.myCanvas.width, this.myCanvas.height);        
-    this.scene.add(this.light, this.cube, axesHelper);
+    this.scene.add(this.light, /*this.cube,*/ axesHelper);
+    this.loader.load('/low_poly_spaceship.glb',(gltfScene) => {
+
+      this.loadedModel = gltfScene.scene.children[0];
+      this.scene.add(this.loadedModel);
+      
+      this.loadedModel.scale.set(0.4, 0.4, 0.4);
+      this.loadedModel.rotation.set(0, 0, 0);
+      this.loadedModel.position.set(0, 0, 0)
+    })
+    
+    
     this.update();
 
     //Collect Mouse data
@@ -67,9 +86,6 @@ class GameDevRenderer extends React.Component{
 
       this.mouse.x = e.clientX;
       this.mouse.y = e.clientY;  
-
-      
-
     })
   }
 
@@ -88,7 +104,8 @@ class GameDevRenderer extends React.Component{
     requestAnimationFrame(this.update.bind(this));  
     
    
-
+  if(this.loadedModel){
+  
     this.SMXx = (this.mouse.x - this.rect.left) - (this.rect.width/2);
     this.Ax = this.degreePerPixel * this.SMXx;
     this.X.x = Math.tan(this.Ax* Math.PI / 180)*this.radius;
@@ -99,11 +116,12 @@ class GameDevRenderer extends React.Component{
 
     const delta = new Vector2().copy(this.X).sub(this.P);
     this.P.add(delta.multiplyScalar(1/16));
-    this.cube.position.set(this.P.x, this.P.y, 0);
+    this.loadedModel.position.set(this.P.x, this.P.y-5, 0);
     this.renderer.render(this.scene, this.camera);
 
-    this.cube.rotation.z = -((this.X.x - this.cube.position.x)/12)
-    this.cube.rotation.x = ((this.X.y - this.cube.position.y)/12)
+    this.loadedModel.rotation.z = -((this.X.x - this.loadedModel.position.x)/12)
+    this.loadedModel.rotation.x = (((this.X.y - this.loadedModel.position.y)/12)-Math.PI/2)
+  }
 
   }
 
