@@ -64,12 +64,9 @@ class GameDevRenderer extends React.Component{
     this.light.position.set(5, 4, 0);
     this.material = new MeshNormalMaterial;
     this.geometry = new SphereGeometry(0.3, 30, 30);
-    console.log(this.rect.left);
-    console.log(this.rect.right);
-    console.log(this.rect.top);
-    console.log(this.rect.bottom);
 
-    for (let i = 0; i < 5; i++) {
+
+    for (let i = 0; i < 50; i++) {
       
       this.enemiesArray[i] = new Mesh(this.geometry, this.material);
       
@@ -116,38 +113,48 @@ class GameDevRenderer extends React.Component{
     requestAnimationFrame(this.update.bind(this));  
     
    
-  if(this.loadedModel){
-  
-    this.SMXx = (this.mouse.x - this.rect.left) - (this.rect.width/2);
-    this.Ax = this.degreePerPixel * this.SMXx;
-    this.X.x = Math.tan(this.Ax* Math.PI / 180)*this.radius;
-
-    this.SMXy = (this.mouse.y - this.rect.top) - (this.rect.height/2);
-    this.Ay = this.degreePerPixel * this.SMXy;
-    this.X.y = -Math.tan(this.Ay* Math.PI / 180)*this.radius;
-
-    const delta = new Vector2().copy(this.X).sub(this.P);
-    this.P.add(delta.multiplyScalar(1/16));
-    this.loadedModel.position.set(this.P.x, this.P.y-0.5, 0);
-    this.renderer.render(this.scene, this.camera);
-
-    this.loadedModel.rotation.z = -((this.X.x - this.loadedModel.position.x)/12)
-    this.loadedModel.rotation.x = (((this.X.y - this.loadedModel.position.y)/10)-Math.PI/2)
+    if(this.loadedModel){
     
-  }
+      this.SMXx = (this.mouse.x - this.rect.left) - (this.rect.width/2);
+      this.Ax = this.degreePerPixel * this.SMXx;
+      this.X.x = Math.tan(this.Ax* Math.PI / 180)*this.radius;
 
+      this.SMXy = (this.mouse.y - this.rect.top) - (this.rect.height/2);
+      this.Ay = this.degreePerPixel * this.SMXy;
+      this.X.y = -Math.tan(this.Ay* Math.PI / 180)*this.radius;
 
-  for(let i = 0; i < 5; i++){
+      const delta = new Vector2().copy(this.X).sub(this.P);
+      this.P.add(delta.multiplyScalar(1/16));
+      this.loadedModel.position.set(this.P.x, this.P.y-0.5, 0);
+      this.renderer.render(this.scene, this.camera);
 
-    if(this.enemiesArray[i].position.z > 29.7) {
-
-      this.enemiesArray[i].position.x = (Math.random() *5) * Math.random() < 0.5 ? -1 : 1;
-      this.enemiesArray[i].position.y = (Math.random() *5) * Math.random() < 0.5 ? -1 : 1;
-      this.enemiesArray[i].position.z = -(Math.random() *250) + 100;
+      this.loadedModel.rotation.z = -((this.X.x - this.loadedModel.position.x)/12)
+      this.loadedModel.rotation.x = (((this.X.y - this.loadedModel.position.y)/10)-Math.PI/2)
+      
     }
-    this.enemiesArray[i].position.z += 0.3;
-  }
 
+
+    for(let i = 0; i < 50; i++){
+      this.enemiesArray[i].position.z += 0.3;
+
+      if(this.enemiesArray[i].position.z > 29.7) {
+        
+        let sphereScale = Math.random()*1.2;
+        this.enemiesArray[i].scale.set(sphereScale, sphereScale, sphereScale)
+
+        if(this.loadedModel && i % 5 === 0){
+
+          this.enemiesArray[i].position.x = this.loadedModel.position.x;
+          this.enemiesArray[i].position.y = this.loadedModel.position.y + 0.5;
+          this.enemiesArray[i].position.z = -(Math.random() *125) + 75;
+        } else {
+        
+          this.enemiesArray[i].position.x = (Math.random() *5) * Math.random() < 0.5 ? -1 : 1;
+          this.enemiesArray[i].position.y = (Math.random() *5) * Math.random() < 0.5 ? -1 : 1;
+          this.enemiesArray[i].position.z = -(Math.random() *125) + 75;
+        }
+      }
+    }
   }
 
   private spawnSystem(): void {
