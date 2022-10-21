@@ -45,7 +45,7 @@ class GameDevRenderer extends React.Component{
   X = new Vector2(0, 0);
   mouse = new Vector2(0, 0);
   oldMouse = new Vector2(0, 0);
-  radius = 30;
+  radius = 5;
   degreePerPixel!: number;
   P = new Vector2(0,0);
 
@@ -83,7 +83,7 @@ class GameDevRenderer extends React.Component{
       this.loadedModel = gltfScene.scene.children[0];
       this.scene.add(this.loadedModel);
       
-      this.loadedModel.scale.set(0.2, 0.2, 0.2);
+      this.loadedModel.scale.set(0.04, 0.04, 0.04);
       this.loadedModel.rotation.set(0, 0, 0);
       this.loadedModel.position.set(0, 0, 0);
       
@@ -128,12 +128,12 @@ class GameDevRenderer extends React.Component{
 
     const delta = new Vector2().copy(this.X).sub(this.P);
     this.P.add(delta.multiplyScalar(1/16));
-    this.loadedModel.position.set(this.P.x, this.P.y-5, 0);
+    this.loadedModel.position.set(this.P.x, this.P.y-0.5, 0);
     this.renderer.render(this.scene, this.camera);
 
     this.loadedModel.rotation.z = -((this.X.x - this.loadedModel.position.x)/12)
     this.loadedModel.rotation.x = (((this.X.y - this.loadedModel.position.y)/10)-Math.PI/2)
-    this.loadedModel.position.z = 90;
+    
   }
 
 

@@ -31,6 +31,7 @@ class VrAppRenderer extends React.Component{
   material!: MeshNormalMaterial;
   geometry!: BoxGeometry;
   
+  
   //Rotation variables
 
   xMax = Math.PI/4;
