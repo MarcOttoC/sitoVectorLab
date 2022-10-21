@@ -7,9 +7,10 @@ import {
   DirectionalLight,
   MeshNormalMaterial,
   Vector2,
-  BoxGeometry,
   AxesHelper,
   Object3D,
+  SphereGeometry,
+  Vector3,
 } from "three";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
@@ -30,8 +31,9 @@ class GameDevRenderer extends React.Component{
   vrModel!: Mesh;
   light!: DirectionalLight;
   material!: MeshNormalMaterial;
-  geometry!: BoxGeometry;
-  cube!: Mesh;
+  geometry!: SphereGeometry;
+  enemiesArray:Mesh[] = [];
+  enemy!: Mesh;
   rect!: DOMRect;
   
   //Rotation variables
@@ -61,23 +63,33 @@ class GameDevRenderer extends React.Component{
     this.light = new DirectionalLight(0xffffff, 1.0);
     this.light.position.set(5, 4, 0);
     this.material = new MeshNormalMaterial;
-    this.geometry = new BoxGeometry(11, 1, 12);
-    //this.cube = new Mesh(this.geometry, this.material);
-    //this.cube.position.x = 0;
-    //this.cube.position.y = 0;
+    this.geometry = new SphereGeometry(0.3, 30, 30);
+    console.log(this.rect.left);
+    console.log(this.rect.right);
+    console.log(this.rect.top);
+    console.log(this.rect.bottom);
+
+    for (let i = 0; i < 5; i++) {
+      
+      this.enemiesArray[i] = new Mesh(this.geometry, this.material);
+      
+    }
+
     this.renderer.setSize(this.myCanvas.width, this.myCanvas.height);        
-    this.scene.add(this.light, /*this.cube,*/ axesHelper);
+    this.scene.add(this.light, axesHelper);
+
     this.loader.load('/low_poly_spaceship.glb',(gltfScene) => {
 
       this.loadedModel = gltfScene.scene.children[0];
       this.scene.add(this.loadedModel);
       
-      this.loadedModel.scale.set(0.4, 0.4, 0.4);
+      this.loadedModel.scale.set(0.2, 0.2, 0.2);
       this.loadedModel.rotation.set(0, 0, 0);
-      this.loadedModel.position.set(0, 0, 0)
+      this.loadedModel.position.set(0, 0, 0);
+      
     })
     
-    
+    this.spawnSystem();
     this.update();
 
     //Collect Mouse data
@@ -120,8 +132,35 @@ class GameDevRenderer extends React.Component{
     this.renderer.render(this.scene, this.camera);
 
     this.loadedModel.rotation.z = -((this.X.x - this.loadedModel.position.x)/12)
-    this.loadedModel.rotation.x = (((this.X.y - this.loadedModel.position.y)/12)-Math.PI/2)
+    this.loadedModel.rotation.x = (((this.X.y - this.loadedModel.position.y)/10)-Math.PI/2)
+    this.loadedModel.position.z = 90;
   }
+
+
+  for(let i = 0; i < 5; i++){
+
+    if(this.enemiesArray[i].position.z > 29.7) {
+
+      this.enemiesArray[i].position.x = (Math.random() *5) * Math.random() < 0.5 ? -1 : 1;
+      this.enemiesArray[i].position.y = (Math.random() *5) * Math.random() < 0.5 ? -1 : 1;
+      this.enemiesArray[i].position.z = -(Math.random() *250) + 100;
+    }
+    this.enemiesArray[i].position.z += 0.3;
+  }
+
+  }
+
+  private spawnSystem(): void {
+    
+
+    
+  for(let i = 0; i < 5; i++){
+
+    this.enemiesArray[i].position.x = (Math.random() *5) * Math.random() < 0.5 ? -1 : 1;
+    this.enemiesArray[i].position.y = (Math.random() *5) * Math.random() < 0.5 ? -1 : 1;
+    this.enemiesArray[i].position.z = -(Math.random() *100) + 100;
+    this.scene.add(this.enemiesArray[i]);
+    }
 
   }
 
