@@ -10,7 +10,10 @@ import {
   AxesHelper,
   Object3D,
   SphereGeometry,
-  Vector3,
+  Box3,
+  Sphere,
+  BoxHelper,
+  PositionalAudio,
 } from "three";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
@@ -20,7 +23,7 @@ class GameDevRenderer extends React.Component{
   //imported 3d model
 
   loader = new GLTFLoader();
-  loadedModel!: Object3D;
+  spaceship!: Object3D;
 
   ////Scene elements
   
@@ -64,12 +67,11 @@ class GameDevRenderer extends React.Component{
     this.light.position.set(5, 4, 0);
     this.material = new MeshNormalMaterial;
     this.geometry = new SphereGeometry(0.3, 30, 30);
+    
 
-
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 10; i++) {
       
       this.enemiesArray[i] = new Mesh(this.geometry, this.material);
-      
     }
 
     this.renderer.setSize(this.myCanvas.width, this.myCanvas.height);        
@@ -77,15 +79,14 @@ class GameDevRenderer extends React.Component{
 
     this.loader.load('/low_poly_spaceship.glb',(gltfScene) => {
 
-      this.loadedModel = gltfScene.scene.children[0];
-      this.scene.add(this.loadedModel);
+      this.spaceship = gltfScene.scene.children[0];
+      this.scene.add(this.spaceship);
       
-      this.loadedModel.scale.set(0.04, 0.04, 0.04);
-      this.loadedModel.rotation.set(0, 0, 0);
-      this.loadedModel.position.set(0, 0, 0);
-      
+      this.spaceship.scale.set(0.04, 0.04, 0.04);
+      this.spaceship.rotation.set(0, 0, 0);
+      this.spaceship.position.set(0, 0, 0);      
     })
-    
+
     this.spawnSystem();
     this.update();
 
@@ -113,7 +114,7 @@ class GameDevRenderer extends React.Component{
     requestAnimationFrame(this.update.bind(this));  
     
    
-    if(this.loadedModel){
+    if(this.spaceship){
     
       this.SMXx = (this.mouse.x - this.rect.left) - (this.rect.width/2);
       this.Ax = this.degreePerPixel * this.SMXx;
@@ -125,27 +126,33 @@ class GameDevRenderer extends React.Component{
 
       const delta = new Vector2().copy(this.X).sub(this.P);
       this.P.add(delta.multiplyScalar(1/16));
-      this.loadedModel.position.set(this.P.x, this.P.y-0.5, 0);
+      this.spaceship.position.set(this.P.x, this.P.y-0.5, 0);
       this.renderer.render(this.scene, this.camera);
 
-      this.loadedModel.rotation.z = -((this.X.x - this.loadedModel.position.x)/12)
-      this.loadedModel.rotation.x = (((this.X.y - this.loadedModel.position.y)/10)-Math.PI/2)
-      
+      this.spaceship.rotation.z = -((this.X.x - this.spaceship.position.x)/12)
+      this.spaceship.rotation.x = (((this.X.y - this.spaceship.position.y)/10)-Math.PI/2)
+
     }
 
 
-    for(let i = 0; i < 50; i++){
+    for(let i = 0; i < 10; i++){
       this.enemiesArray[i].position.z += 0.3;
+
+      if(this.spaceship && this.enemiesArray[i].position.z > -0.3 && this.enemiesArray[i].position.z < 0.3){
+
+        if((this.enemiesArray[i].position.x > (this.spaceship.position.x - 1.3) && this.enemiesArray[i].position.x < (this.spaceship.position.x + 1.3)) &&
+        (this.enemiesArray[i].position.y > (this.spaceship.position.y - 1.3) && this.enemiesArray[i].position.y < (this.spaceship.position.y + 1.3))){
+
+          console.log("done");
+        }
+      }
 
       if(this.enemiesArray[i].position.z > 29.7) {
         
-        let sphereScale = Math.random()*1.2;
-        this.enemiesArray[i].scale.set(sphereScale, sphereScale, sphereScale)
+        if(this.spaceship && i % 4 === 0){
 
-        if(this.loadedModel && i % 5 === 0){
-
-          this.enemiesArray[i].position.x = this.loadedModel.position.x;
-          this.enemiesArray[i].position.y = this.loadedModel.position.y + 0.5;
+          this.enemiesArray[i].position.x = this.spaceship.position.x;
+          this.enemiesArray[i].position.y = this.spaceship.position.y + 0.5;
           this.enemiesArray[i].position.z = -(Math.random() *125) + 75;
         } else {
         
@@ -159,13 +166,11 @@ class GameDevRenderer extends React.Component{
 
   private spawnSystem(): void {
     
-
-    
   for(let i = 0; i < 5; i++){
 
     this.enemiesArray[i].position.x = (Math.random() *5) * Math.random() < 0.5 ? -1 : 1;
     this.enemiesArray[i].position.y = (Math.random() *5) * Math.random() < 0.5 ? -1 : 1;
-    this.enemiesArray[i].position.z = -(Math.random() *100) + 100;
+    this.enemiesArray[i].position.z = -(Math.random() *100) + 300;
     this.scene.add(this.enemiesArray[i]);
     }
 
